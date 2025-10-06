@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "name": "Hogaza de Masa Madre",
+    "description": "Pan artesanal elaborado con masa madre natural, fermentación lenta de 24 horas. Corteza crujiente y miga esponjosa.",
+    "price": "4.50",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRDY5RTJFIiByeD0iMTAiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9IjEwMCIgcng9IjgwIiByeT0iNDAiIGZpbGw9IiNBNzc2MkEiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9Ijg1IiByeD0iNzAiIHJ5PSIzNSIgZmlsbD0iI0Y0QTQ2MSIvPgo8L3N2Zz4=",
+    "category": "Panes"
+  },
+  {
+    "id": 2,
+    "name": "Baguette Tradicional",
+    "description": "Baguette francesa clásica con corteza dorada y crujiente. Perfecta para acompañar cualquier comida.",
+    "price": "2.20",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjRBNDYxIiByeD0iMTAiLz4KPHJlY3QgeD0iMjAiIHk9Ijg1IiB3aWR0aD0iMTYwIiBoZWlnaHQ9IjMwIiBmaWxsPSIjRDY5RTJFIiByeD0iMTUiLz4KPHJlY3QgeD0iMzAiIHk9Ijc1IiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjQTc3NjJBIiByeD0iMjUiLz4KPC9zdmc+",
+    "category": "Panes"
+  },
+  {
+    "id": 3,
+    "name": "Pan de Centeno Integral",
+    "description": "Pan denso y nutritivo elaborado con harina de centeno integral. Rico en fibra y sabor intenso.",
+    "price": "3.80",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjOEI0NTEzIiByeD0iMTAiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9IjEwMCIgcng9IjcwIiByeT0iNDUiIGZpbGw9IiM2NTQ2MjEiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9Ijg1IiByeD0iNjAiIHJ5PSI0MCIgZmlsbD0iIzkyNjEyNyIvPgo8L3N2Zz4=",
+    "category": "Panes"
+  },
+  {
+    "id": 4,
+    "name": "Pan de Nueces",
+    "description": "Pan artesanal con nueces tostadas, textura suave y sabor único. Ideal para desayunos especiales.",
+    "price": "4.20",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjQTc3NjJBIiByeD0iMTAiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9IjEwMCIgcng9Ijc1IiByeT0iNDIiIGZpbGw9IiM4QjQ1MTMiLz4KPGNpcmNsZSBjeD0iODAiIGN5PSI5MCIgcj0iNCIgZmlsbD0iIzY1NDYyMSIvPgo8Y2lyY2xlIGN4PSIxMjAiIGN5PSIxMTAiIHI9IjQiIGZpbGw9IiM2NTQ2MjEiLz4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTIwIiByPSIzIiBmaWxsPSIjNjU0NjIxIi8+Cjwvc3ZnPg==",
+    "category": "Panes"
+  },
+  {
+    "id": 5,
+    "name": "Croissant de Mantequilla",
+    "description": "Croissant francés hojaldrado con mantequilla de primera calidad. Crujiente por fuera, tierno por dentro.",
+    "price": "2.50",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPHBhdGggZD0iTTUwIDEyMEM1MCA5MCA4MCA2MCAEMjAgNzBDMTYwIDgwIDE3MCA5MCAENzAgMTIwQzE3MCAENTAgMTQwIDE2MCA5MCAENTBDNzAgMTQwIDUwIDEzMCA1MCAxMjBaIiBmaWxsPSIjRjRBNDYxIi8+CjxwYXRoIGQ9Ik02MCAEMzBDNjAgMTAwIDkwIDcwIDEzMCA4MEMxNTAgOTAgMTYwIDEwMCAxNjAgMTMwQzE2MCAENDAgMTMwIDE1MCA4MCAENDBDNzAgMTMwIDYwIDEzNSA2MCAEMzBaIiBmaWxsPSIjRDY5RTJFIi8+Cjwvc3ZnPg==",
+    "category": "Bollería"
+  },
+  {
+    "id": 6,
+    "name": "Palmera de Chocolate",
+    "description": "Hojaldre en forma de palmera bañado en chocolate negro. Un clásico irresistible de la bollería.",
+    "price": "3.20",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPGVsbGlwc2UgY3g9IjEwMCIgY3k9IjEwMCIgcng9IjgwIiByeT0iNDAiIGZpbGw9IiM0QTI1MUEiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9Ijg1IiByeD0iNzAiIHJ5PSIzNSIgZmlsbD0iIzZGNEUzNyIvPgo8Y2lyY2xlIGN4PSI3MCIgY3k9Ijg1IiByPSIxNSIgZmlsbD0iIzRBMjUxQSIvPgo8Y2lyY2xlIGN4PSIxMzAiIGN5PSI4NSIgcj0iMTUiIGZpbGw9IiM0QTI1MUEiLz4KPC9zdmc+",
+    "category": "Bollería"
+  },
+  {
+    "id": 7,
+    "name": "Ensaimada Mallorquina",
+    "description": "Ensaimada tradicional de Mallorca, esponjosa y espolvoreada con azúcar glas. Receta centenaria.",
+    "price": "4.80",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI4MCIgZmlsbD0iI0Y0QTQ2MSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjYwIiBmaWxsPSIjRkZGOEVGIi8+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiNGNEE0NjEiLz4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSIyMCIgZmlsbD0iI0ZGRjhFRiIvPgo8L3N2Zz4=",
+    "category": "Bollería"
+  },
+  {
+    "id": 8,
+    "name": "Magdalena Casera",
+    "description": "Magdalena esponjosa elaborada con ingredientes naturales. Sabor tradicional que recuerda a la infancia.",
+    "price": "1.80",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9IjEzMCIgcng9IjQwIiByeT0iNTAiIGZpbGw9IiNGNEE0NjEiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9Ijg0IiByeD0iNDUiIHJ5PSIzMCIgZmlsbD0iI0Y5Q0Q3MSIvPgo8cmVjdCB4PSI3MCIgeT0iMTYwIiB3aWR0aD0iNjAiIGhlaWdodD0iMjAiIGZpbGw9IiNENjlFMkUiIHJ4PSIxMCIvPgo8L3N2Zz4=",
+    "category": "Bollería"
+  },
+  {
+    "id": 9,
+    "name": "Tarta de Queso Cremosa",
+    "description": "Tarta de queso cremosa con base de galleta. Textura suave y sabor equilibrado, decorada con frutos rojos.",
+    "price": "18.50",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTIwIiByPSI3MCIgZmlsbD0iI0Y5Q0Q3MSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjY1IiBmaWxsPSIjRkZGOEVGIi8+CjxyZWN0IHg9IjQwIiB5PSIxNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iMjAiIGZpbGw9IiNENjlFMkUiIHJ4PSI1Ii8+CjxjaXJjbGUgY3g9IjgwIiBjeT0iODAiIHI9IjUiIGZpbGw9IiNEQzI2MjYiLz4KPGNpcmNsZSBjeD0iMTIwIiBjeT0iOTAiIHI9IjQiIGZpbGw9IiNEQzI2MjYiLz4KPC9zdmc+",
+    "category": "Pasteles y Tartas"
+  },
+  {
+    "id": 10,
+    "name": "Tarta de Chocolate Negro",
+    "description": "Intensa tarta de chocolate negro con ganache. Para los verdaderos amantes del chocolate.",
+    "price": "22.00",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTIwIiByPSI3MCIgZmlsbD0iIzRBMjUxQSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjY1IiBmaWxsPSIjNkY0RTM3Ii8+CjxyZWN0IHg9IjQwIiB5PSIxNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iMjAiIGZpbGw9IiM0QTI1MUEiIHJ4PSI1Ii8+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjkwIiByPSIxNSIgZmlsbD0iI0ZGRjhFRiIvPgo8L3N2Zz4=",
+    "category": "Pasteles y Tartas"
+  },
+  {
+    "id": 11,
+    "name": "Milhojas de Crema",
+    "description": "Delicado milhojas con capas de hojaldre y crema pastelera. Espolvoreado con azúcar glas.",
+    "price": "4.50",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPHJlY3QgeD0iNDAiIHk9IjE0MCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxNSIgZmlsbD0iI0Y0QTQ2MSIvPgo8cmVjdCB4PSI0MCIgeT0iMTEwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjRkZGOEVGIi8+CjxyZWN0IHg9IjQwIiB5PSI5MCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxNSIgZmlsbD0iI0Y0QTQ2MSIvPgo8cmVjdCB4PSI0MCIgeT0iNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iMTAiIGZpbGw9IiNGRkY4RUYiLz4KPHJlY3QgeD0iNDAiIHk9IjQwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRjRBNDYxIi8+Cjwvc3ZnPg==",
+    "category": "Pasteles y Tartas"
+  },
+  {
+    "id": 12,
+    "name": "Empanada de Atún",
+    "description": "Empanada casera rellena de atún, tomate, cebolla y pimientos. Masa crujiente y relleno sabroso.",
+    "price": "3.80",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9IjEwMCIgcng9IjgwIiByeT0iNDAiIGZpbGw9IiNGNEE0NjEiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9IjEwMCIgcng9IjcwIiByeT0iMzUiIGZpbGw9IiNEQzI2MjYiLz4KPGV2bGlwc2UgY3g9IjEwMCIgY3k9IjEwMCIgcng9IjUwIiByeT0iMjUiIGZpbGw9IiNGRkY4RUYiLz4KPGNpcmNsZSBjeD0iOTAiIGN5PSI5NSIgcj0iMyIgZmlsbD0iIzIyQzU1RSIvPgo8Y2lyY2xlIGN4PSIxMTAiIGN5PSIxMDUiIHI9IjMiIGZpbGw9IiMyMkM1NUUiLz4KPC9zdmc+",
+    "category": "Salados"
+  },
+  {
+    "id": 13,
+    "name": "Quiche Lorraine",
+    "description": "Quiche tradicional francesa con bacon, queso gruyère y nata. Base de masa quebrada crujiente.",
+    "price": "5.20",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTIwIiByPSI3MCIgZmlsbD0iI0Y5Q0Q3MSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMTAiIHI9IjYwIiBmaWxsPSIjRkZGOEVGIi8+CjxyZWN0IHg9IjQwIiB5PSIxNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iMjAiIGZpbGw9IiNENjlFMkUiIHJ4PSI1Ii8+CjxyZWN0IHg9IjcwIiB5PSI5MCIgd2lkdGg9IjE1IiBoZWlnaHQ9IjgiIGZpbGw9IiNEQzI2MjYiLz4KPHJlY3QgeD0iMTEwIiB5PSIxMDAiIHdpZHRoPSIxNSIgaGVpZ2h0PSI4IiBmaWxsPSIjREM2MjYiLz4KPC9zdmc+",
+    "category": "Salados"
+  },
+  {
+    "id": 14,
+    "name": "Focaccia de Romero",
+    "description": "Pan plano italiano con aceite de oliva virgen extra, sal marina y romero fresco. Aromático y sabroso.",
+    "price": "4.00",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPHJlY3QgeD0iMzAiIHk9IjcwIiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjRjRBNDYxIiByeD0iMTAiLz4KPGNpcmNsZSBjeD0iNjAiIGN5PSI5MCIgcj0iMyIgZmlsbD0iIzIyQzU1RSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjMiIGZpbGw9IiMyMkM1NUUiLz4KPGNpcmNsZSBjeD0iMTQwIiBjeT0iMTEwIiByPSIzIiBmaWxsPSIjMjJDNTVFIi8+CjxjaXJjbGUgY3g9IjgwIiBjeT0iMTIwIiByPSIyIiBmaWxsPSIjMjJDNTVFIi8+Cjwvc3ZnPg==",
+    "category": "Salados"
+  },
+  {
+    "id": 15,
+    "name": "Rosquilla Glaseada",
+    "description": "Rosquilla esponjosa con glaseado de azúcar. Un dulce tradicional perfecto para el café.",
+    "price": "2.10",
+    "image": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGOEVGIiByeD0iMTAiLz4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI3MCIgZmlsbD0iI0Y0QTQ2MSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjUwIiBmaWxsPSIjRkZGOEVGIi8+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iMjUiIGZpbGw9IiNGRkY4RUYiLz4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iODAiIHI9IjQ1IiBmaWxsPSIjRjlDRDcxIi8+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iMjAiIGZpbGw9IiNGRkY4RUYiLz4KPC9zdmc+",
+    "category": "Bollería"
+  }
+]

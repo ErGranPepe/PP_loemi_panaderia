@@ -21,6 +21,8 @@ const Admin: React.FC<AdminProps> = ({ onBack }) => {
         image: '',
         category: 'Panes' as ProductCategory,
     });
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string>('');
 
     useEffect(() => {
         const storedProducts = localStorage.getItem('loemi-products');
@@ -55,6 +57,8 @@ const Admin: React.FC<AdminProps> = ({ onBack }) => {
         saveProducts(newProducts);
         setFormData({ name: '', description: '', price: '', image: '', category: 'Panes' });
         setEditingProduct(null);
+        setImageFile(null);
+        setImagePreview('');
     };
 
     const handleEdit = (product: Product) => {
@@ -66,6 +70,8 @@ const Admin: React.FC<AdminProps> = ({ onBack }) => {
             image: product.image,
             category: product.category,
         });
+        setImagePreview(product.image);
+        setImageFile(null);
     };
 
     const handleDelete = (id: number) => {
@@ -78,6 +84,20 @@ const Admin: React.FC<AdminProps> = ({ onBack }) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setImageFile(file);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const result = e.target?.result as string;
+                setImagePreview(result);
+                setFormData(prev => ({ ...prev, image: result }));
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleLogin = (e: React.FormEvent) => {
@@ -170,16 +190,18 @@ const Admin: React.FC<AdminProps> = ({ onBack }) => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-stone-700">URL de la Imagen</label>
+                                <label className="block text-sm font-medium text-stone-700">Imagen del Producto</label>
                                 <input
-                                    type="url"
-                                    name="image"
-                                    value={formData.image}
-                                    onChange={handleChange}
-                                    required
-                                    placeholder="https://ejemplo.com/imagen.jpg"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
                                     className="mt-1 block w-full px-3 py-2 border border-stone-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500"
                                 />
+                                {imagePreview && (
+                                    <div className="mt-2">
+                                        <img src={imagePreview} alt="Vista previa" className="w-32 h-32 object-cover rounded-md" />
+                                    </div>
+                                )}
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-stone-700">Categoría</label>
@@ -197,7 +219,7 @@ const Admin: React.FC<AdminProps> = ({ onBack }) => {
                                     {editingProduct ? 'Actualizar' : 'Añadir'} Producto
                                 </button>
                                 {editingProduct && (
-                                    <button type="button" onClick={() => { setEditingProduct(null); setFormData({ name: '', description: '', price: '', image: '', category: 'Panes' }); }} className="px-4 py-2 bg-stone-500 text-white font-semibold rounded-lg hover:bg-stone-600">
+                                    <button type="button" onClick={() => { setEditingProduct(null); setFormData({ name: '', description: '', price: '', image: '', category: 'Panes' }); setImageFile(null); setImagePreview(''); }} className="px-4 py-2 bg-stone-500 text-white font-semibold rounded-lg hover:bg-stone-600">
                                         Cancelar
                                     </button>
                                 )}

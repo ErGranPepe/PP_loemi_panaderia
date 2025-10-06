@@ -1,127 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import { Product, ProductCategory } from '../types';
+import { Product, ProductCategory, Order } from '../types';
+import { OrderManager } from '../utils/orderManager';
 
 interface AdminDashboardProps {
   onBack: () => void;
 }
 
-const categories: ProductCategory[] = ['Panes', 'Bollería', 'Pasteles y Tartas', 'Salados'];
-
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
+  const [activeSection, setActiveSection] = useState('products');
   const [products, setProducts] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [sortKey, setSortKey] = useState<string>('name');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [categories, setCategories] = useState(['Panes', 'Bollería', 'Pasteles y Tartas', 'Salados']);
+  const [newCategory, setNewCategory] = useState('');
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [orderManager] = useState(() => OrderManager.getInstance());
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [showOrderModal, setShowOrderModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
-  const [formData, setFormData] = useState({
+  const [productForm, setProductForm] = useState({
     name: '',
     description: '',
     price: '',
     image: '',
-    category: 'Panes' as ProductCategory,
-    stockStatus: 'En stock',
+    category: 'Panes' as ProductCategory
   });
-  const [notification, setNotification] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState('products');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
+  const [orderForm, setOrderForm] = useState({
+    customerName: '',
+    customerPhone: '',
+    customerEmail: '',
+    items: [] as { productId?: number; quantity: number; customPrice?: number; customName?: string; isCustom?: boolean }[]
+  });
+  const [productFilter, setProductFilter] = useState({
+    search: '',
+    category: 'Todas',
+    sortBy: 'name',
+    sortOrder: 'asc' as 'asc' | 'desc'
+  });
+  const [showCustomProductForm, setShowCustomProductForm] = useState(false);
+  const [customProduct, setCustomProduct] = useState({ name: '', price: '' });
 
   useEffect(() => {
     const storedProducts = localStorage.getItem('loemi-products');
     if (storedProducts) {
       setProducts(JSON.parse(storedProducts));
     }
-  }, []);
-
-  useEffect(() => {
-    filterAndSortProducts();
-  }, [products, searchTerm, selectedCategory, sortKey, sortOrder]);
+    setOrders(orderManager.getOrders());
+  }, [orderManager]);
 
   const saveProducts = (newProducts: Product[]) => {
     setProducts(newProducts);
     localStorage.setItem('loemi-products', JSON.stringify(newProducts));
   };
 
-  const filterAndSortProducts = () => {
-    let filtered = [...products];
-    if (searchTerm) {
-      filtered = filtered.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  const addCategory = () => {
+    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
+      setCategories([...categories, newCategory.trim()]);
+      setNewCategory('');
     }
-    if (selectedCategory !== 'All') {
-      filtered = filtered.filter(p => p.category === selectedCategory);
-    }
-    filtered.sort((a, b) => {
-      let aKey = a[sortKey as keyof Product];
-      let bKey = b[sortKey as keyof Product];
-      if (typeof aKey === 'string' && typeof bKey === 'string') {
-        if (sortOrder === 'asc') return aKey.localeCompare(bKey);
-        else return bKey.localeCompare(aKey);
-      }
-      return 0;
-    });
-    setFilteredProducts(filtered);
   };
 
-  const openEditModal = (product: Product) => {
-    setEditingProduct(product);
-    setFormData({
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      image: product.image,
-      category: product.category,
-      stockStatus: (product as any).stockStatus || 'En stock',
-    });
-    setImagePreview(product.image);
+  const deleteCategory = (category: string) => {
+    if (window.confirm(`¿Eliminar categoría "${category}"?`)) {
+      setCategories(categories.filter(c => c !== category));
+    }
+  };
+
+  const openProductModal = (product?: Product) => {
+    if (product) {
+      setEditingProduct(product);
+      setProductForm({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        image: product.image,
+        category: product.category
+      });
+      setImagePreview(product.image);
+    } else {
+      setEditingProduct(null);
+      setProductForm({
+        name: '',
+        description: '',
+        price: '',
+        image: '',
+        category: 'Panes'
+      });
+      setImagePreview('');
+    }
     setImageFile(null);
-    setShowModal(true);
-  };
-
-  const openAddModal = () => {
-    setEditingProduct(null);
-    setFormData({
-      name: '',
-      description: '',
-      price: '',
-      image: '',
-      category: 'Panes',
-      stockStatus: 'En stock',
-    });
-    setImageFile(null);
-    setImagePreview('');
-    setShowModal(true);
-  };
-
-  const handleDeleteClick = (product: Product) => {
-    setProductToDelete(product);
-    setShowConfirm(true);
-  };
-
-  const confirmDelete = () => {
-    if (productToDelete) {
-      const newProducts = products.filter(p => p.id !== productToDelete.id);
-      saveProducts(newProducts);
-      setNotification('Producto eliminado con éxito');
-    }
-    setShowConfirm(false);
-    setProductToDelete(null);
-  };
-
-  const cancelDelete = () => {
-    setShowConfirm(false);
-    setProductToDelete(null);
-  };
-
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setShowProductModal(true);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,586 +100,723 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
       reader.onload = (e) => {
         const result = e.target?.result as string;
         setImagePreview(result);
-        setFormData(prev => ({ ...prev, image: result }));
+        setProductForm(prev => ({ ...prev, image: result }));
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const product: Product & { stockStatus?: string } = {
-      id: editingProduct ? editingProduct.id : Date.now(),
-      name: formData.name,
-      description: formData.description,
-      price: formData.price,
-      image: formData.image,
-      category: formData.category,
-      stockStatus: formData.stockStatus,
+  const saveProduct = () => {
+    if (!productForm.name || !productForm.price) return;
+    
+    const productData = {
+      ...productForm,
+      id: editingProduct?.id || Date.now(),
+      image: productForm.image || imagePreview || 'https://via.placeholder.com/400x400?text=Producto'
     };
+
     let newProducts;
     if (editingProduct) {
-      newProducts = products.map(p => p.id === editingProduct.id ? product : p);
-      setNotification('Producto actualizado con éxito');
+      newProducts = products.map(p => p.id === editingProduct.id ? productData : p);
     } else {
-      newProducts = [...products, product];
-      setNotification('Producto añadido con éxito');
+      newProducts = [...products, productData];
     }
+    
     saveProducts(newProducts);
-    setShowModal(false);
-    setEditingProduct(null);
+    setShowProductModal(false);
     setImageFile(null);
     setImagePreview('');
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-    setEditingProduct(null);
-    setImageFile(null);
-    setImagePreview('');
-  };
-
-  const closeNotification = () => {
-    setNotification(null);
-  };
-
-  const toggleSort = (key: string) => {
-    if (sortKey === key) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortKey(key);
-      setSortOrder('asc');
+  const deleteProduct = (productId: number) => {
+    if (window.confirm('¿Eliminar producto?')) {
+      const newProducts = products.filter(p => p.id !== productId);
+      saveProducts(newProducts);
     }
   };
 
-  const getStockBadgeColor = (status: string) => {
-    switch (status) {
-      case 'En stock': return 'badge-success';
-      case 'Agotado': return 'badge-error';
-      case 'Por encargo': return 'badge-warning';
-      default: return 'badge-neutral';
+  const createOrder = () => {
+    if (!orderForm.customerName || !orderForm.customerPhone || orderForm.items.length === 0) {
+      alert('Completa todos los campos');
+      return;
     }
+
+    const orderItems = orderForm.items.map(item => {
+      if (item.isCustom) {
+        return {
+          name: item.customName || 'Producto personalizado',
+          quantity: item.quantity,
+          price: item.customPrice || 0
+        };
+      } else {
+        const product = products.find(p => p.id === item.productId);
+        return {
+          name: product?.name || '',
+          quantity: item.quantity,
+          price: item.customPrice !== undefined ? item.customPrice : parseFloat(product?.price || '0')
+        };
+      }
+    });
+
+    const total = orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    const order: Order = {
+      id: `ORD-${Date.now()}`,
+      customer: {
+        name: orderForm.customerName,
+        phone: orderForm.customerPhone,
+        email: orderForm.customerEmail
+      },
+      date: new Date().toISOString().split('T')[0],
+      status: 'Pendiente',
+      total,
+      items: orderItems,
+      source: 'web'
+    };
+
+    orderManager.addOrder(order);
+    setOrders(orderManager.getOrders());
+    setShowOrderModal(false);
+    setOrderForm({ customerName: '', customerPhone: '', customerEmail: '', items: [] });
+    setCustomProduct({ name: '', price: '' });
   };
 
-  const renderProductsSection = () => (
-    <>
-      {/* Filters */}
-      <div className="flex flex-wrap items-center mb-4 space-x-4 bg-white p-4 rounded-lg shadow">
-        <div className="flex-1 min-w-64">
+  const updateOrderStatus = (orderId: string, status: Order['status']) => {
+    orderManager.updateOrderStatus(orderId, status);
+    setOrders(orderManager.getOrders());
+  };
+
+  const getFilteredProducts = () => {
+    let filtered = [...products];
+    
+    if (productFilter.search) {
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(productFilter.search.toLowerCase()) ||
+        p.description.toLowerCase().includes(productFilter.search.toLowerCase())
+      );
+    }
+    
+    if (productFilter.category !== 'Todas') {
+      filtered = filtered.filter(p => p.category === productFilter.category);
+    }
+    
+    filtered.sort((a, b) => {
+      let aVal = a[productFilter.sortBy as keyof Product];
+      let bVal = b[productFilter.sortBy as keyof Product];
+      
+      if (productFilter.sortBy === 'price') {
+        aVal = parseFloat(a.price);
+        bVal = parseFloat(b.price);
+      }
+      
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        return productFilter.sortOrder === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      }
+      
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return productFilter.sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+      
+      return 0;
+    });
+    
+    return filtered;
+  };
+
+  const renderCategories = () => (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-6">Gestión de Categorías</h2>
+      
+      <div className="bg-white p-6 rounded-lg shadow mb-6">
+        <h3 className="text-lg font-semibold mb-4">Añadir Nueva Categoría</h3>
+        <div className="flex gap-2">
           <input
             type="text"
-            placeholder="Buscar productos..."
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            className="input input-bordered w-full"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            placeholder="Nombre de la categoría"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
+          <button 
+            onClick={addCategory}
+            className="px-4 py-2 bg-amber-800 text-white rounded hover:bg-amber-900"
+          >
+            Añadir
+          </button>
         </div>
-        <select
-          value={selectedCategory}
-          onChange={e => setSelectedCategory(e.target.value)}
-          className="select select-bordered"
-        >
-          <option value="All">Todas las categorías</option>
-          {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
       </div>
 
-      {/* Products Table */}
-      <div className="overflow-x-auto bg-white rounded-lg shadow">
-        <table className="table table-zebra w-full">
-          <thead>
-            <tr className="bg-amber-900 text-white">
-              <th className="w-16">Foto</th>
-              <th
-                className="cursor-pointer hover:bg-amber-800"
-                onClick={() => toggleSort('name')}
-              >
-                Nombre {sortKey === 'name' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
-              </th>
-              <th
-                className="cursor-pointer hover:bg-amber-800"
-                onClick={() => toggleSort('price')}
-              >
-                Precio {sortKey === 'price' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
-              </th>
-              <th>Categoría</th>
-              <th>Stock</th>
-              <th className="w-32">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProducts.length === 0 && (
-              <tr>
-                <td colSpan={6} className="text-center py-8 text-stone-600">
-                  No se encontraron productos.
-                </td>
-              </tr>
-            )}
-            {filteredProducts.map((product, index) => (
-              <tr key={product.id} className="hover:bg-amber-50">
-                <td>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-12 h-12 rounded object-cover"
-                  />
-                </td>
-                <td className="font-semibold">{product.name}</td>
-                <td>{product.price}€</td>
-                <td>{product.category}</td>
-                <td>
-                  <span className={`badge ${getStockBadgeColor((product as any).stockStatus || 'En stock')}`}>
-                    {(product as any).stockStatus || 'En stock'}
-                  </span>
-                </td>
-                <td>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => openEditModal(product)}
-                      className="btn btn-sm btn-outline btn-info tooltip"
-                      data-tip="Editar"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(product)}
-                      className="btn btn-sm btn-outline btn-error tooltip"
-                      data-tip="Eliminar"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                </td>
-              </tr>
+      <div className="bg-white rounded-lg shadow">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold mb-4">Categorías Actuales</h3>
+          <div className="space-y-2">
+            {categories.map((category) => (
+              <div key={category} className="flex items-center justify-between p-3 border rounded-lg">
+                <span className="font-medium">{category}</span>
+                <button
+                  onClick={() => deleteCategory(category)}
+                  className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200"
+                >
+                  Eliminar
+                </button>
+              </div>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </>
-  );
-
-  const renderStatisticsSection = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div className="card bg-white shadow-lg">
-        <div className="card-body">
-          <h3 className="card-title text-amber-900">Total Productos</h3>
-          <p className="text-3xl font-bold">{products.length}</p>
-        </div>
-      </div>
-      <div className="card bg-white shadow-lg">
-        <div className="card-body">
-          <h3 className="card-title text-amber-900">Categorías</h3>
-          <p className="text-3xl font-bold">{categories.length}</p>
-        </div>
-      </div>
-      <div className="card bg-white shadow-lg">
-        <div className="card-body">
-          <h3 className="card-title text-amber-900">En Stock</h3>
-          <p className="text-3xl font-bold">
-            {products.filter(p => (p as any).stockStatus !== 'Agotado').length}
-          </p>
-        </div>
-      </div>
-      <div className="card bg-white shadow-lg">
-        <div className="card-body">
-          <h3 className="card-title text-amber-900">Agotados</h3>
-          <p className="text-3xl font-bold">
-            {products.filter(p => (p as any).stockStatus === 'Agotado').length}
-          </p>
+          </div>
         </div>
       </div>
     </div>
   );
 
-  const renderOrdersSection = () => {
-    // Mock data for orders
-    const mockOrders = [
-      {
-        id: 'ORD-001',
-        customer: { name: 'María García', email: 'maria@email.com', phone: '600123456' },
-        date: '2024-01-15',
-        status: 'Pendiente',
-        total: 25.50,
-        items: [
-          { name: 'Hogaza de Masa Madre', quantity: 2, price: 3.20 },
-          { name: 'Croissant de Mantequilla', quantity: 1, price: 1.50 }
-        ]
-      },
-      {
-        id: 'ORD-002',
-        customer: { name: 'Carlos López', email: 'carlos@email.com', phone: '600234567' },
-        date: '2024-01-14',
-        status: 'En preparación',
-        total: 18.00,
-        items: [
-          { name: 'Baguette Tradicional', quantity: 3, price: 1.00 },
-          { name: 'Tarta de Queso Cremosa', quantity: 1, price: 15.00 }
-        ]
-      },
-      {
-        id: 'ORD-003',
-        customer: { name: 'Ana Martínez', email: 'ana@email.com', phone: '600345678' },
-        date: '2024-01-13',
-        status: 'Entregado',
-        total: 12.50,
-        items: [
-          { name: 'Empanada de Atún', quantity: 1, price: 8.50 },
-          { name: 'Croissant de Mantequilla', quantity: 2, price: 1.50 }
-        ]
-      }
-    ];
-
-    const getOrderStatusColor = (status: string) => {
-      switch (status) {
-        case 'Pendiente': return 'badge-warning';
-        case 'En preparación': return 'badge-info';
-        case 'Entregado': return 'badge-success';
-        case 'Cancelado': return 'badge-error';
-        default: return 'badge-neutral';
-      }
-    };
-
+  const renderProducts = () => {
+    const filteredProducts = getFilteredProducts();
+    
     return (
-      <>
-        {/* Filters */}
-        <div className="flex flex-wrap items-center mb-4 space-x-4 bg-white p-4 rounded-lg shadow">
-          <div className="flex-1 min-w-64">
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">Gestión de Productos</h2>
+          <button
+            onClick={() => openProductModal()}
+            className="px-4 py-2 bg-amber-800 text-white rounded hover:bg-amber-900"
+          >
+            Añadir Producto
+          </button>
+        </div>
+        
+        {/* Filtros */}
+        <div className="bg-white p-4 rounded-lg shadow mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <input
               type="text"
-              placeholder="Buscar por cliente o nº pedido..."
-              className="input input-bordered w-full"
+              placeholder="Buscar productos..."
+              value={productFilter.search}
+              onChange={(e) => setProductFilter({...productFilter, search: e.target.value})}
+              className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
+            <select
+              value={productFilter.category}
+              onChange={(e) => setProductFilter({...productFilter, category: e.target.value})}
+              className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+              <option value="Todas">Todas las categorías</option>
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+            <select
+              value={productFilter.sortBy}
+              onChange={(e) => setProductFilter({...productFilter, sortBy: e.target.value})}
+              className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+              <option value="name">Ordenar por nombre</option>
+              <option value="price">Ordenar por precio</option>
+              <option value="category">Ordenar por categoría</option>
+            </select>
+            <select
+              value={productFilter.sortOrder}
+              onChange={(e) => setProductFilter({...productFilter, sortOrder: e.target.value as 'asc' | 'desc'})}
+              className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+              <option value="asc">Ascendente</option>
+              <option value="desc">Descendente</option>
+            </select>
           </div>
-          <select className="select select-bordered">
-            <option value="all">Todos los estados</option>
-            <option value="pending">Pendiente</option>
-            <option value="preparing">En preparación</option>
-            <option value="delivered">Entregado</option>
-            <option value="cancelled">Cancelado</option>
-          </select>
-          <input
-            type="date"
-            className="input input-bordered"
-            placeholder="Fecha desde"
-          />
-          <input
-            type="date"
-            className="input input-bordered"
-            placeholder="Fecha hasta"
-          />
         </div>
-
-        {/* Orders Table */}
-        <div className="overflow-x-auto bg-white rounded-lg shadow">
-          <table className="table table-zebra w-full">
-            <thead>
-              <tr className="bg-amber-900 text-white">
-                <th>Nº Pedido</th>
-                <th>Cliente</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-                <th>Total</th>
-                <th className="w-32">Acciones</th>
+        
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-amber-900 text-white">
+              <tr>
+                <th className="px-4 py-3 text-left">Imagen</th>
+                <th className="px-4 py-3 text-left">Nombre</th>
+                <th className="px-4 py-3 text-left">Precio</th>
+                <th className="px-4 py-3 text-left">Categoría</th>
+                <th className="px-4 py-3 text-left">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {mockOrders.map((order) => (
-                <tr key={order.id} className="hover:bg-amber-50">
-                  <td className="font-semibold">{order.id}</td>
-                  <td>
-                    <div>
-                      <div className="font-semibold">{order.customer.name}</div>
-                      <div className="text-sm text-stone-600">{order.customer.email}</div>
-                    </div>
+              {filteredProducts.map((product) => (
+                <tr key={product.id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-3">
+                    <img src={product.image} alt={product.name} className="w-12 h-12 object-cover rounded" />
                   </td>
-                  <td>{new Date(order.date).toLocaleDateString('es-ES')}</td>
-                  <td>
-                    <span className={`badge ${getOrderStatusColor(order.status)}`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="font-semibold">{order.total.toFixed(2)}€</td>
-                  <td>
-                    <div className="flex space-x-2">
+                  <td className="px-4 py-3">{product.name}</td>
+                  <td className="px-4 py-3">{product.price}€</td>
+                  <td className="px-4 py-3">{product.category}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex gap-2">
                       <button
-                        className="btn btn-sm btn-outline btn-info tooltip"
-                        data-tip="Ver detalle"
+                        onClick={() => openProductModal(product)}
+                        className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200"
                       >
-                        👁️
+                        Editar
                       </button>
-                      <select className="select select-xs select-bordered">
-                        <option value={order.status}>{order.status}</option>
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="En preparación">En preparación</option>
-                        <option value="Entregado">Entregado</option>
-                        <option value="Cancelado">Cancelado</option>
-                      </select>
+                      <button
+                        onClick={() => deleteProduct(product.id)}
+                        className="px-2 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200"
+                      >
+                        Eliminar
+                      </button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {filteredProducts.length === 0 && (
+            <div className="p-6 text-center text-gray-600">
+              No se encontraron productos
+            </div>
+          )}
         </div>
-      </>
+      </div>
     );
   };
 
+  const renderOrders = () => (
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Gestión de Pedidos</h2>
+        <button
+          onClick={() => setShowOrderModal(true)}
+          className="px-4 py-2 bg-amber-800 text-white rounded hover:bg-amber-900"
+        >
+          Crear Pedido Manual
+        </button>
+      </div>
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        {orders.length === 0 ? (
+          <div className="p-6 text-center text-gray-600">
+            No hay pedidos disponibles
+          </div>
+        ) : (
+          <table className="w-full">
+            <thead className="bg-amber-900 text-white">
+              <tr>
+                <th className="px-4 py-3 text-left">ID</th>
+                <th className="px-4 py-3 text-left">Cliente</th>
+                <th className="px-4 py-3 text-left">Fecha</th>
+                <th className="px-4 py-3 text-left">Total</th>
+                <th className="px-4 py-3 text-left">Estado</th>
+                <th className="px-4 py-3 text-left">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order.id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-3 font-mono text-sm">{order.id}</td>
+                  <td className="px-4 py-3">
+                    <div>
+                      <div className="font-semibold">{order.customer.name}</div>
+                      <div className="text-sm text-gray-600">{order.customer.phone}</div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">{new Date(order.date).toLocaleDateString('es-ES')}</td>
+                  <td className="px-4 py-3 font-semibold">{order.total.toFixed(2)}€</td>
+                  <td className="px-4 py-3">
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      order.status === 'Pendiente' ? 'bg-yellow-100 text-yellow-800' :
+                      order.status === 'En preparación' ? 'bg-blue-100 text-blue-800' :
+                      order.status === 'Entregado' ? 'bg-green-100 text-green-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <select
+                      value={order.status}
+                      onChange={(e) => updateOrderStatus(order.id, e.target.value as Order['status'])}
+                      className="px-2 py-1 border rounded text-sm"
+                    >
+                      <option value="Pendiente">Pendiente</option>
+                      <option value="En preparación">En preparación</option>
+                      <option value="Entregado">Entregado</option>
+                      <option value="Cancelado">Cancelado</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="flex min-h-screen bg-stone-100">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg flex flex-col">
-        <div className="p-4 border-b border-stone-200 font-bold text-xl text-amber-900">
-          Loemi Admin
+      <aside className="w-64 bg-white shadow-lg">
+        <div className="p-4 border-b">
+          <h1 className="text-xl font-bold text-amber-900">Loemi Admin</h1>
         </div>
-        <nav className="flex flex-col flex-grow p-4 space-y-2">
+        <nav className="p-4 space-y-2">
           <button
-            className={`text-left px-3 py-2 rounded hover:bg-amber-100 font-semibold ${
-              activeSection === 'products' ? 'bg-amber-200 text-amber-900' : 'text-stone-700'
+            className={`w-full text-left px-3 py-2 rounded ${
+              activeSection === 'products' ? 'bg-amber-200 text-amber-900' : 'text-gray-700 hover:bg-gray-100'
             }`}
             onClick={() => setActiveSection('products')}
           >
             📦 Productos
           </button>
           <button
-            className={`text-left px-3 py-2 rounded hover:bg-amber-100 font-semibold ${
-              activeSection === 'categories' ? 'bg-amber-200 text-amber-900' : 'text-stone-700'
+            className={`w-full text-left px-3 py-2 rounded ${
+              activeSection === 'categories' ? 'bg-amber-200 text-amber-900' : 'text-gray-700 hover:bg-gray-100'
             }`}
             onClick={() => setActiveSection('categories')}
           >
             🗂️ Categorías
           </button>
           <button
-            className={`text-left px-3 py-2 rounded hover:bg-amber-100 font-semibold ${
-              activeSection === 'orders' ? 'bg-amber-200 text-amber-900' : 'text-stone-700'
+            className={`w-full text-left px-3 py-2 rounded ${
+              activeSection === 'orders' ? 'bg-amber-200 text-amber-900' : 'text-gray-700 hover:bg-gray-100'
             }`}
             onClick={() => setActiveSection('orders')}
           >
-            🛒 Pedidos
-          </button>
-          <button
-            className={`text-left px-3 py-2 rounded hover:bg-amber-100 font-semibold ${
-              activeSection === 'users' ? 'bg-amber-200 text-amber-900' : 'text-stone-700'
-            }`}
-            onClick={() => setActiveSection('users')}
-          >
-            👤 Usuarios
-          </button>
-          <button
-            className={`text-left px-3 py-2 rounded hover:bg-amber-100 font-semibold ${
-              activeSection === 'stats' ? 'bg-amber-200 text-amber-900' : 'text-stone-700'
-            }`}
-            onClick={() => setActiveSection('stats')}
-          >
-            📊 Estadísticas
+            📋 Pedidos
           </button>
         </nav>
-        <button
-          className="m-4 px-3 py-2 bg-stone-300 rounded hover:bg-stone-400"
-          onClick={onBack}
-        >
-          Volver a la Web
-        </button>
+        <div className="p-4 mt-auto">
+          <button
+            onClick={onBack}
+            className="w-full px-3 py-2 bg-gray-300 rounded hover:bg-gray-400"
+          >
+            Volver a la Web
+          </button>
+        </div>
       </aside>
 
       {/* Main content */}
-      <main className="flex-grow p-6 overflow-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-stone-800">
-            {activeSection === 'products' && 'Gestión de Productos'}
-            {activeSection === 'categories' && 'Gestión de Categorías'}
-            {activeSection === 'orders' && 'Gestión de Pedidos'}
-            {activeSection === 'users' && 'Gestión de Usuarios'}
-            {activeSection === 'stats' && 'Estadísticas'}
-          </h1>
-          {activeSection === 'products' && (
-            <button
-              onClick={openAddModal}
-              className="btn btn-primary btn-lg fixed top-6 right-6 z-10 shadow-lg"
-            >
-              ➕ Añadir Producto
-            </button>
-          )}
-        </div>
+      <main className="flex-1">
+        {activeSection === 'products' && renderProducts()}
+        {activeSection === 'categories' && renderCategories()}
+        {activeSection === 'orders' && renderOrders()}
+      </main>
 
-        {activeSection === 'products' && renderProductsSection()}
-        {activeSection === 'stats' && renderStatisticsSection()}
-        {activeSection === 'categories' && (
-          <div className="text-center py-12">
-            <p className="text-stone-600">Gestión de categorías próximamente...</p>
-          </div>
-        )}
-        {activeSection === 'orders' && renderOrdersSection()}
-        {activeSection === 'users' && (
-          <div className="text-center py-12">
-            <p className="text-stone-600">Gestión de usuarios próximamente...</p>
-          </div>
-        )}
-
-        {/* Edit/Add Modal */}
-        {showModal && (
-          <div className="modal modal-open">
-            <div className="modal-box max-w-lg">
-              <h3 className="font-bold text-lg mb-4">
-                {editingProduct ? 'Editar Producto' : 'Añadir Producto'}
-              </h3>
-              <form onSubmit={handleFormSubmit} className="space-y-4">
-                <div>
-                  <label className="label">
-                    <span className="label-text">Nombre</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleFormChange}
-                    required
-                    className="input input-bordered w-full"
-                  />
-                </div>
-                <div>
-                  <label className="label">
-                    <span className="label-text">Descripción</span>
-                  </label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleFormChange}
-                    required
-                    rows={3}
-                    className="textarea textarea-bordered w-full"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="label">
-                      <span className="label-text">Precio (€)</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleFormChange}
-                      required
-                      placeholder="3.50"
-                      className="input input-bordered w-full"
-                    />
-                  </div>
-                  <div>
-                    <label className="label">
-                      <span className="label-text">Categoría</span>
-                    </label>
-                    <select
-                      name="category"
-                      value={formData.category}
-                      onChange={handleFormChange}
-                      className="select select-bordered w-full"
-                    >
-                      {categories.map(cat => (
-                        <option key={cat} value={cat}></option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div>
-                  <label className="label">
-                    <span className="label-text">Imagen del Producto</span>
-                  </label>
+      {/* Product Modal */}
+      {showProductModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4">
+              {editingProduct ? 'Editar Producto' : 'Añadir Producto'}
+            </h3>
+            <div className="space-y-4">
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={productForm.name}
+                onChange={(e) => setProductForm({...productForm, name: e.target.value})}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+              <textarea
+                placeholder="Descripción"
+                value={productForm.description}
+                onChange={(e) => setProductForm({...productForm, description: e.target.value})}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+                rows={3}
+              />
+              <input
+                type="number"
+                step="0.01"
+                placeholder="Precio"
+                value={productForm.price}
+                onChange={(e) => setProductForm({...productForm, price: e.target.value})}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+              <div>
+                <label className="block text-sm font-medium mb-2">Imagen</label>
+                <div className="space-y-2">
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="file-input file-input-bordered w-full"
+                    className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  />
+                  <div className="text-center text-gray-500 text-sm">o</div>
+                  <input
+                    type="url"
+                    placeholder="URL de imagen"
+                    value={productForm.image}
+                    onChange={(e) => {
+                      setProductForm({...productForm, image: e.target.value});
+                      setImagePreview(e.target.value);
+                    }}
+                    className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
                   />
                   {imagePreview && (
                     <div className="mt-2">
-                      <img
-                        src={imagePreview}
-                        alt="Vista previa"
-                        className="w-24 h-24 object-cover rounded border"
+                      <img 
+                        src={imagePreview} 
+                        alt="Vista previa" 
+                        className="w-full h-32 object-cover rounded border"
+                        onError={() => setImagePreview('')}
                       />
                     </div>
                   )}
                 </div>
-                <div>
-                  <label className="label">
-                    <span className="label-text">Estado de Stock</span>
-                  </label>
-                  <select
-                    name="stockStatus"
-                    value={formData.stockStatus}
-                    onChange={handleFormChange}
-                    className="select select-bordered w-full"
-                  >
-                    <option value="En stock">En stock</option>
-                    <option value="Agotado">Agotado</option>
-                    <option value="Por encargo">Por encargo</option>
-                  </select>
-                </div>
-                <div className="modal-action">
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="btn btn-ghost"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                  >
-                    {editingProduct ? 'Actualizar' : 'Añadir'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {/* Confirm Delete Modal */}
-        {showConfirm && (
-          <div className="modal modal-open">
-            <div className="modal-box">
-              <h3 className="font-bold text-lg">Confirmar eliminación</h3>
-              <p className="py-4">
-                ¿Seguro que quieres eliminar el producto <strong>{productToDelete?.name}</strong>?
-                Esta acción no se puede deshacer.
-              </p>
-              <div className="modal-action">
-                <button
-                  onClick={cancelDelete}
-                  className="btn btn-ghost"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={confirmDelete}
-                  className="btn btn-error"
-                >
-                  Eliminar
-                </button>
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* Toast Notification */}
-        {notification && (
-          <div className="toast toast-top toast-end z-50">
-            <div className="alert alert-success">
-              <span>{notification}</span>
-              <button
-                onClick={closeNotification}
-                className="btn btn-sm btn-circle btn-ghost"
+              <select
+                value={productForm.category}
+                onChange={(e) => setProductForm({...productForm, category: e.target.value as ProductCategory})}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
               >
-                ✕
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex gap-2 mt-6">
+              <button
+                onClick={saveProduct}
+                className="flex-1 px-4 py-2 bg-amber-800 text-white rounded hover:bg-amber-900"
+              >
+                Guardar
+              </button>
+              <button
+                onClick={() => {
+                  setShowProductModal(false);
+                  setImageFile(null);
+                  setImagePreview('');
+                }}
+                className="flex-1 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancelar
               </button>
             </div>
           </div>
-        )}
-      </main>
+        </div>
+      )}
+
+      {/* Order Modal */}
+      {showOrderModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-semibold mb-4">Crear Pedido Manual</h3>
+            <div className="space-y-4">
+              <input
+                type="text"
+                placeholder="Nombre del cliente"
+                value={orderForm.customerName}
+                onChange={(e) => setOrderForm({...orderForm, customerName: e.target.value})}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+              <input
+                type="tel"
+                placeholder="Teléfono"
+                value={orderForm.customerPhone}
+                onChange={(e) => setOrderForm({...orderForm, customerPhone: e.target.value})}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+              <input
+                type="email"
+                placeholder="Email (opcional)"
+                value={orderForm.customerEmail}
+                onChange={(e) => setOrderForm({...orderForm, customerEmail: e.target.value})}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Productos</label>
+                {orderForm.items.map((item, index) => {
+                  const product = item.isCustom ? null : products.find(p => p.id === item.productId);
+                  const displayName = item.isCustom ? item.customName : product?.name;
+                  const basePrice = item.isCustom ? item.customPrice : parseFloat(product?.price || '0');
+                  const finalPrice = item.customPrice !== undefined ? item.customPrice : basePrice;
+                  
+                  return (
+                    <div key={index} className={`border rounded p-3 mb-3 ${item.isCustom ? 'border-blue-300 bg-blue-50' : ''}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <span className="font-medium">{displayName}</span>
+                          {item.isCustom && <span className="ml-2 px-2 py-1 bg-blue-200 text-blue-800 text-xs rounded">Personalizado</span>}
+                        </div>
+                        <button
+                          onClick={() => {
+                            const newItems = orderForm.items.filter((_, i) => i !== index);
+                            setOrderForm({...orderForm, items: newItems});
+                          }}
+                          className="px-2 py-1 bg-red-100 text-red-700 rounded text-sm"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Cantidad</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={item.quantity}
+                            onChange={(e) => {
+                              const newItems = [...orderForm.items];
+                              newItems[index].quantity = parseInt(e.target.value) || 1;
+                              setOrderForm({...orderForm, items: newItems});
+                            }}
+                            className="w-full px-2 py-1 border rounded text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">{item.isCustom ? 'Precio' : 'Precio base'}</label>
+                          <input
+                            type="text"
+                            value={`${basePrice.toFixed(2)}€`}
+                            disabled={!item.isCustom}
+                            className={`w-full px-2 py-1 border rounded text-sm ${item.isCustom ? '' : 'bg-gray-100'}`}
+                          />
+                        </div>
+                        {!item.isCustom && (
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Precio personalizado</label>
+                            <input
+                              type="number"
+                              step="0.01"
+                              placeholder={product?.price}
+                              value={item.customPrice || ''}
+                              onChange={(e) => {
+                                const newItems = [...orderForm.items];
+                                newItems[index].customPrice = e.target.value ? parseFloat(e.target.value) : undefined;
+                                setOrderForm({...orderForm, items: newItems});
+                              }}
+                              className="w-full px-2 py-1 border rounded text-sm"
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-2 text-sm text-gray-600">
+                        Subtotal: {(finalPrice * item.quantity).toFixed(2)}€
+                      </div>
+                    </div>
+                  );
+                })}
+                
+                <div className="space-y-2">
+                  <select
+                    onChange={(e) => {
+                      const productId = parseInt(e.target.value);
+                      if (productId && !orderForm.items.find(item => item.productId === productId && !item.isCustom)) {
+                        setOrderForm({
+                          ...orderForm,
+                          items: [...orderForm.items, { productId, quantity: 1 }]
+                        });
+                      }
+                      e.target.value = '';
+                    }}
+                    className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  >
+                    <option value="">Añadir producto del catálogo...</option>
+                    {products.map(product => (
+                      <option key={product.id} value={product.id}>
+                        {product.name} - {product.price}€
+                      </option>
+                    ))}
+                  </select>
+                  
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomProductForm(true)}
+                    className="w-full px-3 py-2 border-2 border-dashed border-blue-300 text-blue-600 rounded hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    + Añadir producto personalizado
+                  </button>
+                </div>
+                
+                {orderForm.items.length > 0 && (
+                  <div className="mt-4 p-3 bg-gray-50 rounded">
+                    <div className="font-semibold text-lg">
+                      Total: {orderForm.items.reduce((sum, item) => {
+                        if (item.isCustom) {
+                          return sum + ((item.customPrice || 0) * item.quantity);
+                        } else {
+                          const product = products.find(p => p.id === item.productId);
+                          const price = item.customPrice !== undefined ? item.customPrice : parseFloat(product?.price || '0');
+                          return sum + (price * item.quantity);
+                        }
+                      }, 0).toFixed(2)}€
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="flex gap-2 mt-6">
+              <button
+                onClick={createOrder}
+                disabled={orderForm.items.length === 0}
+                className="flex-1 px-4 py-2 bg-amber-800 text-white rounded hover:bg-amber-900 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                Crear Pedido
+              </button>
+              <button
+                onClick={() => {
+                  setShowOrderModal(false);
+                  setOrderForm({ customerName: '', customerPhone: '', customerEmail: '', items: [] });
+                  setCustomProduct({ name: '', price: '' });
+                }}
+                className="flex-1 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Product Modal */}
+      {showCustomProductForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4">Añadir Producto Personalizado</h3>
+            <div className="space-y-4">
+              <input
+                type="text"
+                placeholder="Nombre del producto"
+                value={customProduct.name}
+                onChange={(e) => setCustomProduct({...customProduct, name: e.target.value})}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+              <input
+                type="number"
+                step="0.01"
+                placeholder="Precio"
+                value={customProduct.price}
+                onChange={(e) => setCustomProduct({...customProduct, price: e.target.value})}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+            </div>
+            <div className="flex gap-2 mt-6">
+              <button
+                onClick={() => {
+                  if (customProduct.name && customProduct.price) {
+                    setOrderForm({
+                      ...orderForm,
+                      items: [...orderForm.items, {
+                        quantity: 1,
+                        customName: customProduct.name,
+                        customPrice: parseFloat(customProduct.price),
+                        isCustom: true
+                      }]
+                    });
+                    setCustomProduct({ name: '', price: '' });
+                    setShowCustomProductForm(false);
+                  }
+                }}
+                disabled={!customProduct.name || !customProduct.price}
+                className="flex-1 px-4 py-2 bg-amber-800 text-white rounded hover:bg-amber-900 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                Añadir
+              </button>
+              <button
+                onClick={() => {
+                  setShowCustomProductForm(false);
+                  setCustomProduct({ name: '', price: '' });
+                }}
+                className="flex-1 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

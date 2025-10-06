@@ -5,23 +5,32 @@ import Location from './components/Location';
 import TripForm from './components/TripForm';
 import ChatWindow from './components/ChatWindow';
 import Products from './components/Products';
-import ShoppingCart from './components/ShoppingCart';
 import ProductModal from './components/ProductModal';
 import AdminDashboard from './components/AdminDashboard';
 import Notification from './components/Notification';
 import Hero from './components/Hero';
 import { WhatsAppIcon } from './components/icons';
-import { Product, CartItem } from './types';
+import { Product } from './types';
 import RotatingBread from './components/RotatingBread';
+import './src/styles/mobile-optimizations.css';
 
 // Default product data
 const defaultProducts: Product[] = [
-  { id: 1, name: 'Hogaza de Masa Madre', description: 'Pan artesanal con fermentación lenta de 24 horas. Su corteza crujiente libera aromas intensos, mientras la miga alveolada y esponjosa invita a saborear cada bocado con mantequilla fundida.', price: '3.20', image: 'https://cdn.pixabay.com/photo/2017/05/07/08/56/bread-2291908_1280.jpg', category: 'Panes' },
-  { id: 2, name: 'Croissant de Mantequilla', description: 'Hojaldre artesanal elaborado con capas de mantequilla pura que se derriten en la boca. Su textura crujiente por fuera y tierna por dentro evoca el aroma matutino de las mejores boulangeries francesas.', price: '1.50', image: 'https://cdn.pixabay.com/photo/2017/01/20/00/30/croissant-1995056_1280.jpg', category: 'Bollería' },
-  { id: 3, name: 'Tarta de Queso Cremosa', description: 'Crema de queso fresco batida a mano con un toque de vainilla y limón. Su base de galleta crujiente contrasta con la suavidad sedosa, coronada por un ligero dorado que invita a repetir.', price: '15.00', image: 'https://cdn.pixabay.com/photo/2017/05/07/08/56/cheesecake-2291907_1280.jpg', category: 'Pasteles y Tartas' },
-  { id: 4, name: 'Empanada de Atún', description: 'Masa artesanal rellena de atún fresco, pimiento rojo asado y cebolla caramelizada. Cada bocado combina la jugosidad del mar con el aroma tostado de la masa horneada al momento.', price: '8.50', image: 'https://cdn.pixabay.com/photo/2017/01/20/00/30/empanada-1995057_1280.jpg', category: 'Salados' },
-  { id: 5, name: 'Baguette Tradicional', description: 'Barra francesa con corteza dorada y crujiente que canta al partirla. Su interior esponjoso y ligeramente ácido invita a acompañar quesos curados o simplemente untada con aceite de oliva virgen.', price: '1.00', image: 'https://cdn.pixabay.com/photo/2016/03/05/19/02/baguette-1239437_1280.jpg', category: 'Panes' },
-  { id: 6, name: 'Palmera de Chocolate', description: 'Hojaldre enrollado con chocolate negro fundido que se derrite en la boca. La combinación de capas crujientes y el intenso sabor del cacao puro crea una experiencia irresistible.', price: '1.80', image: 'https://cdn.pixabay.com/photo/2017/01/20/00/30/pastry-1995058_1280.jpg', category: 'Bollería' },
+  { id: 1, name: 'Hogaza de Masa Madre', description: 'Pan artesanal elaborado con masa madre natural, fermentación lenta de 24 horas. Corteza crujiente y miga esponjosa.', price: '4.50', image: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=400&h=400&fit=crop', category: 'Panes' },
+  { id: 2, name: 'Baguette Tradicional', description: 'Baguette francesa clásica con corteza dorada y crujiente. Perfecta para acompañar cualquier comida.', price: '2.20', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop', category: 'Panes' },
+  { id: 3, name: 'Pan de Centeno Integral', description: 'Pan denso y nutritivo elaborado con harina de centeno integral. Rico en fibra y sabor intenso.', price: '3.80', image: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&h=400&fit=crop', category: 'Panes' },
+  { id: 4, name: 'Pan de Nueces', description: 'Pan artesanal con nueces tostadas, textura suave y sabor único. Ideal para desayunos especiales.', price: '4.20', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', category: 'Panes' },
+  { id: 5, name: 'Croissant de Mantequilla', description: 'Croissant francés hojaldrado con mantequilla de primera calidad. Crujiente por fuera, tierno por dentro.', price: '2.50', image: 'https://images.unsplash.com/photo-1555507036-ab794f4afe5b?w=400&h=400&fit=crop', category: 'Bollería' },
+  { id: 6, name: 'Palmera de Chocolate', description: 'Hojaldre en forma de palmera bañado en chocolate negro. Un clásico irresistible de la bollería.', price: '3.20', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop', category: 'Bollería' },
+  { id: 7, name: 'Ensaimada Mallorquina', description: 'Ensaimada tradicional de Mallorca, esponjosa y espolvoreada con azúcar glas. Receta centenaria.', price: '4.80', image: 'https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=400&h=400&fit=crop', category: 'Bollería' },
+  { id: 8, name: 'Magdalena Casera', description: 'Magdalena esponjosa elaborada con ingredientes naturales. Sabor tradicional que recuerda a la infancia.', price: '1.80', image: 'https://images.unsplash.com/photo-1587668178277-295251f900ce?w=400&h=400&fit=crop', category: 'Bollería' },
+  { id: 9, name: 'Tarta de Queso Cremosa', description: 'Tarta de queso cremosa con base de galleta. Textura suave y sabor equilibrado, decorada con frutos rojos.', price: '18.50', image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=400&fit=crop', category: 'Pasteles y Tartas' },
+  { id: 10, name: 'Tarta de Chocolate Negro', description: 'Intensa tarta de chocolate negro con ganache. Para los verdaderos amantes del chocolate.', price: '22.00', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop', category: 'Pasteles y Tartas' },
+  { id: 11, name: 'Milhojas de Crema', description: 'Delicado milhojas con capas de hojaldre y crema pastelera. Espolvoreado con azúcar glas.', price: '4.50', image: 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&h=400&fit=crop', category: 'Pasteles y Tartas' },
+  { id: 12, name: 'Empanada de Atún', description: 'Empanada casera rellena de atún, tomate, cebolla y pimientos. Masa crujiente y relleno sabroso.', price: '3.80', image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=400&fit=crop', category: 'Salados' },
+  { id: 13, name: 'Quiche Lorraine', description: 'Quiche tradicional francesa con bacon, queso gruyère y nata. Base de masa quebrada crujiente.', price: '5.20', image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=400&fit=crop', category: 'Salados' },
+  { id: 14, name: 'Focaccia de Romero', description: 'Pan plano italiano con aceite de oliva virgen extra, sal marina y romero fresco. Aromático y sabroso.', price: '4.00', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=400&fit=crop', category: 'Salados' },
+  { id: 15, name: 'Rosquilla Glaseada', description: 'Rosquilla esponjosa con glaseado de azúcar. Un dulce tradicional perfecto para el café.', price: '2.10', image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=400&fit=crop', category: 'Bollería' }
 ];
 
 
@@ -63,60 +72,22 @@ const Footer: React.FC<{ onAdminClick: () => void }> = ({ onAdminClick }) => (
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [notification, setNotification] = useState<{message: string, isVisible: boolean}>({message: '', isVisible: false});
-  const [shouldAnimateCart, setShouldAnimateCart] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setIsEditMode(params.get('edit') === 'true');
 
-    // Load products from localStorage or use defaults
-    const storedProducts = localStorage.getItem('loemi-products');
-    if (storedProducts) {
-      setProducts(JSON.parse(storedProducts));
-    } else {
-      setProducts(defaultProducts);
-      localStorage.setItem('loemi-products', JSON.stringify(defaultProducts));
-    }
+    // Forzar carga de productos nuevos
+    setProducts(defaultProducts);
+    localStorage.setItem('loemi-products', JSON.stringify(defaultProducts));
   }, []);
 
-  const handleAddToCart = useCallback((product: Product) => {
-    setCartItems(prevItems => {
-        const exist = prevItems.find(item => item.id === product.id);
-        if (exist) {
-            return prevItems.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
-        } else {
-            return [...prevItems, { ...product, quantity: 1 }];
-        }
-    });
 
-    // Show notification
-    setNotification({
-      message: `Añadido: ${product.name} (${product.price}€)`,
-      isVisible: true
-    });
-
-    // Animate cart icon
-    setShouldAnimateCart(true);
-    setTimeout(() => setShouldAnimateCart(false), 600);
-
-    setIsCartOpen(true);
-  }, []);
-
-  const handleUpdateQuantity = useCallback((productId: number, quantity: number) => {
-      setCartItems(prevItems => {
-          if (quantity <= 0) {
-              return prevItems.filter(item => item.id !== productId);
-          }
-          return prevItems.map(item => item.id === productId ? { ...item, quantity } : item);
-      });
-  }, []);
 
   const handleSaveProduct = (product: Product) => {
     setProducts(prev => {
@@ -153,11 +124,7 @@ function App() {
 
   return (
     <div className="bg-stone-100">
-      <Header
-        cartItemCount={cartItems.reduce((acc, item) => acc + item.quantity, 0)}
-        onCartClick={() => setIsCartOpen(!isCartOpen)}
-        shouldAnimateCart={shouldAnimateCart}
-      />
+      <Header />
       <main>
         <div className="relative bg-black">
           <Hero />
@@ -165,26 +132,41 @@ function App() {
             <RotatingBread />
           </div>
         </div>
-        <Products
-          products={products}
-          onAddToCart={handleAddToCart}
-          isEditMode={isEditMode}
-          onEdit={handleEditProduct}
-          onDelete={handleDeleteProduct}
-          onAdd={handleAddNewProduct}
-        />
+        <div className="relative">
+          <Products
+            products={products}
+            isEditMode={isEditMode}
+            onEdit={handleEditProduct}
+            onDelete={handleDeleteProduct}
+            onAdd={handleAddNewProduct}
+          />
+        </div>
         <Testimonials />
         <Location />
         <TripForm />
       </main>
+      
+      {/* Video parallax simple */}
+      <div className="relative w-full h-screen overflow-hidden">
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="w-full h-full object-cover transform scale-105"
+          style={{ 
+            transform: 'translateZ(0)',
+            filter: 'brightness(0.6)'
+          }}
+        >
+          <source src="./video_bucle_gente_pasando.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-stone-800/20 to-stone-800"></div>
+      </div>
+      
       <Footer onAdminClick={() => setIsAdmin(true)} />
       <ChatWindow />
-      <ShoppingCart
-        items={cartItems}
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        onUpdateQuantity={handleUpdateQuantity}
-      />
+
       {isModalOpen && (
           <ProductModal
             product={editingProduct}
