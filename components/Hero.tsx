@@ -34,10 +34,10 @@ const Hero: React.FC = () => {
         playsInline
         style={{ transform: `translateY(${bgOffset}px)` }}
       >
-        <source src="/video_pan.mp4" type="video/mp4" />
+        <source src="/media/video_pan.mp4" type="video/mp4" />
         {/* Fallback image if video fails */}
         <img
-          src="/assets/logo-loemi.png"
+          src="/media/logo_loemi.png"
           alt="Bakery background"
           className="absolute inset-0 w-full h-full object-cover"
         />

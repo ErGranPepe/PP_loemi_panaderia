@@ -1,14 +1,18 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  css: {
-    preprocessorOptions: {
-      // Add global CSS here if needed
+  base: '', // rutas relativas o vacías
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+      },
     },
   },
-  daisyui: {
-    themes: ["light"],
-  },
-});
+  publicDir: 'public', // incluir todo lo de /public en el build
+})

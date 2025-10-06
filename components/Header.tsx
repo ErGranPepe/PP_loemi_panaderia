@@ -18,7 +18,7 @@ const Header: React.FC = () => {
           <div className="flex items-center">
 <a href="#" className="flex-shrink-0 flex items-center space-x-2 mr-auto">
   <img
-    src="/loemi_logo_no_bg.png"
+    src="/media/loemi_logo_no_bg.png"
     alt="Loemi Artesanos Logo"
     className="h-48 sm:h-72 w-auto object-contain transition-transform duration-300 hover:scale-105 -my-16 sm:-my-26 z-10 relative"
   />

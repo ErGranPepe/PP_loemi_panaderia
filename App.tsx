@@ -159,7 +159,7 @@ function App() {
             filter: 'brightness(0.6)'
           }}
         >
-          <source src="./video_bucle_gente_pasando.mp4" type="video/mp4" />
+          <source src="/media/video_bucle_gente_pasando.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-stone-800/20 to-stone-800"></div>
       </div>
