@@ -20,7 +20,7 @@ const Header: React.FC = () => {
   <img
     src="/media/loemi_logo_no_bg.png"
     alt="Loemi Artesanos Logo"
-    className="h-48 sm:h-72 w-auto object-contain transition-transform duration-300 hover:scale-105 -my-16 sm:-my-26 z-10 relative"
+    className="h-20 sm:h-48 w-auto object-contain transition-transform duration-300 hover:scale-105 -my-2 sm:-my-14 z-10 relative"
   />
 </a>
           </div>

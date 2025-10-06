@@ -24,11 +24,11 @@ const Products: React.FC<ProductsProps> = ({ products, isEditMode, onAdd, onEdit
 
 
     return (
-        <section id="productos" className="py-16 sm:py-24 bg-stone-50">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-12">
-                    <h2 className="text-4xl font-serif font-bold tracking-wide text-stone-900 sm:text-5xl">Nuestros Tesoros Horneados</h2>
-                    <p className="mt-4 max-w-2xl mx-auto text-lg text-stone-700 font-serif italic">
+        <section id="productos" className="py-8 sm:py-16 lg:py-24 bg-stone-50">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+                <div className="text-center mb-8 sm:mb-12">
+                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-wide text-stone-900">Nuestros Productos</h2>
+                    <p className="mt-2 sm:mt-4 max-w-2xl mx-auto text-sm sm:text-lg text-stone-700 font-serif italic px-4">
                         Desde el pan de cada día hasta el capricho más dulce.
                     </p>
                     {isEditMode && (
@@ -41,20 +41,20 @@ const Products: React.FC<ProductsProps> = ({ products, isEditMode, onAdd, onEdit
                 </div>
                 {categories.map(category => (
                     productsByCategory[category].length > 0 && (
-                        <div key={category} className="mb-16">
-                            <h3 className="text-3xl font-serif font-bold text-stone-800 mb-8 text-center">{category}</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+                        <div key={category} className="mb-8 sm:mb-16">
+                            <h3 className="text-xl sm:text-3xl font-serif font-bold text-stone-800 mb-4 sm:mb-8 text-center">{category}</h3>
+                            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
                                 {productsByCategory[category].map((product) => (
-                                    <div key={product.id} className="group relative border border-stone-300 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col bg-white hover:scale-105">
+                                    <div key={product.id} className="group relative border border-stone-300 rounded-lg sm:rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col bg-white hover:scale-105">
                                         <div className="aspect-square bg-stone-100 overflow-hidden">
                                            <img src={product.image} alt={product.name} className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-300" />
                                         </div>
-                                        <div className="p-4 sm:p-6 flex flex-col flex-grow">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <h3 className="text-lg sm:text-xl font-serif font-semibold text-stone-900 leading-tight">{product.name}</h3>
-                                                <p className="text-xl font-bold text-amber-900 ml-2">{parseFloat(product.price).toFixed(2)}€</p>
+                                        <div className="p-2 sm:p-4 lg:p-6 flex flex-col flex-grow">
+                                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 sm:mb-2">
+                                                <h3 className="text-sm sm:text-lg lg:text-xl font-serif font-semibold text-stone-900 leading-tight">{product.name}</h3>
+                                                <p className="text-lg sm:text-xl font-bold text-amber-900 sm:ml-2">{parseFloat(product.price).toFixed(2)}€</p>
                                             </div>
-                                            <p className="text-stone-600 text-sm leading-relaxed flex-grow font-serif">{product.description}</p>
+                                            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed flex-grow font-serif line-clamp-3">{product.description}</p>
                                             <div className="mt-4">
                                                 {isEditMode && (
                                                     <div className="flex space-x-2">

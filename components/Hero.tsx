@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative h-[50vh] sm:h-[60vh] lg:h-[80vh] bg-cover bg-center overflow-hidden">
+    <section className="relative h-[40vh] sm:h-[60vh] lg:h-[80vh] bg-cover bg-center overflow-hidden">
       {/* Video Background */}
       <video
         className="absolute inset-0 w-full h-full object-cover"
@@ -65,27 +65,26 @@ const Hero: React.FC = () => {
         {/* Removed as per user request to avoid distraction */}
 
         <h1
-          className={`text-2xl sm:text-4xl lg:text-6xl font-serif font-bold tracking-wide drop-shadow-md transition-all duration-1000 px-4 ${
+          className={`text-xl sm:text-4xl lg:text-6xl font-serif font-bold tracking-wide drop-shadow-md transition-all duration-1000 px-2 leading-tight ${
             textVisible ? 'animate-flour-write fade-in-letter-spacing' : 'opacity-0'
           }`}
         >
           El Sabor de la Tradición
         </h1>
         <p
-          className={`mt-2 sm:mt-3 text-sm sm:text-base lg:text-lg max-w-xl drop-shadow-sm font-serif italic transition-all duration-1000 delay-500 slide-up px-4 ${
+          className={`mt-1 sm:mt-3 text-xs sm:text-base lg:text-lg max-w-sm sm:max-w-xl drop-shadow-sm font-serif italic transition-all duration-1000 delay-500 slide-up px-2 ${
             textVisible ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          Pan artesanal hecho con pasión y los mejores ingredientes.
+          Pan artesanal hecho con pasión
         </p>
 
         {/* Breathing CTA Button with Highlight */}
         <a
           href="#productos"
-          className="mt-4 sm:mt-8 px-6 sm:px-12 py-2 sm:py-3 bg-amber-900 hover:bg-amber-800 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 shadow-md font-serif animate-breath animate-highlight relative overflow-hidden"
+          className="mt-3 sm:mt-8 px-4 sm:px-12 py-2 sm:py-3 bg-amber-900 hover:bg-amber-800 rounded-full text-xs sm:text-lg font-semibold transition-all duration-300 shadow-md font-serif animate-breath animate-highlight relative overflow-hidden"
         >
-          <span className="hidden sm:inline">Ver nuestros productos</span>
-          <span className="sm:hidden">Ver productos</span>
+          Ver productos
         </a>
       </div>
 

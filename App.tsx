@@ -147,7 +147,7 @@ function App() {
       </main>
       
       {/* Video parallax simple */}
-      <div className="relative w-full h-screen overflow-hidden">
+      <div className="relative w-full h-64 sm:h-96 lg:h-screen overflow-hidden">
         <video 
           autoPlay 
           loop 
