@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -6,9 +6,17 @@ const RotatingBread: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const rotationRef = useRef(0);
   const breadRef = useRef<THREE.Mesh | null>(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    if (!mountRef.current) return;
+    const check = () => setEnabled(window.innerWidth >= 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [enabled]);
+
+  useEffect(() => {
+    if (!enabled || !mountRef.current) return;
 
     const width = mountRef.current.clientWidth;
     const height = mountRef.current.clientHeight;
@@ -90,6 +98,7 @@ const RotatingBread: React.FC = () => {
     };
   }, []);
 
+  if (!enabled) return null;
   return <div ref={mountRef} style={{ width: '100%', height: '100vh', position: 'absolute', top: 0, left: 0, zIndex: -1 }} />;
 };
 

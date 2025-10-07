@@ -24,10 +24,19 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative h-[40vh] sm:h-[60vh] lg:h-[80vh] bg-cover bg-center overflow-hidden">
-      {/* Video Background */}
+    <section className="relative h-[45vh] sm:h-[60vh] lg:h-[80vh] bg-cover bg-center overflow-hidden">
+      {/* Background: image on mobile, video on >= sm */}
+      <picture className="absolute inset-0 w-full h-full block sm:hidden" style={{ transform: `translateY(${bgOffset * 0.4}px)` }}>
+        <img
+          src="/media/logo_loemi.png"
+          alt="Bakery background"
+          className="w-full h-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+      </picture>
       <video
-        className="absolute inset-0 w-full h-full object-cover"
+        className="hidden sm:block absolute inset-0 w-full h-full object-cover"
         autoPlay
         loop
         muted
@@ -35,12 +44,6 @@ const Hero: React.FC = () => {
         style={{ transform: `translateY(${bgOffset}px)` }}
       >
         <source src="/media/video_pan.mp4" type="video/mp4" />
-        {/* Fallback image if video fails */}
-        <img
-          src="/media/logo_loemi.png"
-          alt="Bakery background"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
       </video>
 
       {/* Semi-transparent black overlay */}
@@ -58,8 +61,8 @@ const Hero: React.FC = () => {
 
       {/* Animated Text */}
       <div
-        className="relative w-full max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 h-full flex flex-col justify-center items-center text-center text-amber-100"
-        style={{ transform: `translateY(${-textOffset}px)` }}
+        className="relative w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 h-full flex flex-col justify-center items-center text-center text-amber-100"
+        style={{ transform: `translateY(${-textOffset * 0.7}px)` }}
       >
         {/* Watermark Logo */}
         {/* Removed as per user request to avoid distraction */}

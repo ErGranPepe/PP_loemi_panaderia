@@ -13,14 +13,14 @@ const Header: React.FC = () => {
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-30">
-      <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+      <nav className="w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+        <div className="flex items-center justify-between h-14 md:h-20">
           <div className="flex items-center">
 <a href="#" className="flex-shrink-0 flex items-center space-x-2 mr-auto">
   <img
     src="/media/loemi_logo_no_bg.png"
     alt="Loemi Artesanos Logo"
-    className="h-20 sm:h-48 w-auto object-contain transition-transform duration-300 hover:scale-105 -my-2 sm:-my-14 z-10 relative"
+    className="h-12 md:h-20 lg:h-28 w-auto object-contain transition-transform duration-300 hover:scale-105 my-0 md:-my-4 lg:-my-8 z-10 relative"
   />
 </a>
           </div>

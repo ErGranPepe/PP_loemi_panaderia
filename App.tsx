@@ -123,7 +123,7 @@ function App() {
   }
 
   return (
-    <div className="bg-stone-100">
+    <div className="bg-stone-100 min-h-screen w-full overflow-x-hidden">
       <Header />
       <main>
         <div className="relative bg-black">

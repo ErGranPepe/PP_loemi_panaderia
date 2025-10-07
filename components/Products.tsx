@@ -43,11 +43,11 @@ const Products: React.FC<ProductsProps> = ({ products, isEditMode, onAdd, onEdit
                     productsByCategory[category].length > 0 && (
                         <div key={category} className="mb-8 sm:mb-16">
                             <h3 className="text-xl sm:text-3xl font-serif font-bold text-stone-800 mb-4 sm:mb-8 text-center">{category}</h3>
-                            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
                                 {productsByCategory[category].map((product) => (
-                                    <div key={product.id} className="group relative border border-stone-300 rounded-lg sm:rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col bg-white hover:scale-105">
+                                    <div key={product.id} className="group relative border border-stone-300 rounded-lg sm:rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col bg-white md:hover:scale-105">
                                         <div className="aspect-square bg-stone-100 overflow-hidden">
-                                           <img src={product.image} alt={product.name} className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-300" />
+                                           <img src={product.image} alt={product.name} loading="lazy" decoding="async" className="w-full h-full object-cover object-center md:group-hover:scale-110 transition-transform duration-300" />
                                         </div>
                                         <div className="p-2 sm:p-4 lg:p-6 flex flex-col flex-grow">
                                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 sm:mb-2">
