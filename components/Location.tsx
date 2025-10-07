@@ -1,12 +1,16 @@
 import React from 'react';
 import { MapPinIcon, PhoneIcon } from './icons';
 
-const Location: React.FC = () => {
+interface LocationProps {
+  title: string;
+}
+
+const Location: React.FC<LocationProps> = ({ title }) => {
   return (
     <section id="contacto" className="py-16 sm:py-24">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">Visítanos en Móstoles</h2>
+          <h2 className="text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">{title}</h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-stone-600">
             Te esperamos en nuestro obrador para que disfrutes del sabor del pan de verdad.
           </p>

@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 
-const TripForm: React.FC = () => {
+interface TripFormProps {
+  title: string;
+  onFormSubmit: (data: { name: string; email: string; message: string }) => void;
+}
+
+const TripForm: React.FC<TripFormProps> = ({ title, onFormSubmit }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,8 +23,7 @@ const TripForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically handle form submission, e.g., send to an API
-    console.log('Form data submitted:', formData);
+    onFormSubmit(formData);
     setSubmitted(true);
     setFormData({ name: '', email: '', message: '' });
     setTimeout(() => setSubmitted(false), 5000);
@@ -29,7 +33,7 @@ const TripForm: React.FC = () => {
     <section id="trip-form" className="py-16 sm:py-24 bg-stone-50">
       <div className="w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">¿Planeando un evento?</h2>
+          <h2 className="text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">{title}</h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-stone-600">
             Contáctanos para pedidos especiales, catering o cualquier consulta.
           </p>

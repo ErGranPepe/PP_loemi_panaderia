@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Harina de Trigo", "quantity": 50, "unit": "kg", "minThreshold": 10 },
+  { "id": 2, "name": "Mantequilla", "quantity": 5, "unit": "kg", "minThreshold": 2 },
+  { "id": 3, "name": "Azúcar", "quantity": 20, "unit": "kg", "minThreshold": 5 },
+  { "id": 4, "name": "Huevos", "quantity": 100, "unit": "unidades", "minThreshold": 24 }
+]

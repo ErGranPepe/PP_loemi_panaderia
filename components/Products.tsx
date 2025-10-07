@@ -1,79 +1,114 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useMemo } from "react";
 import { Product } from '../types';
 
 interface ProductsProps {
-    products: Product[];
-    isEditMode: boolean;
-    onAdd: () => void;
-    onEdit: (product: Product) => void;
-    onDelete: (productId: number) => void;
+  products: Product[],
+  title?: string;
+  categories: string[];
 }
 
-const categories = ['Panes', 'Bollería', 'Pasteles y Tartas', 'Salados'];
+interface ProductCardProps {
+  product: Product;
+}
 
-const Products: React.FC<ProductsProps> = ({ products, isEditMode, onAdd, onEdit, onDelete }) => {
-    const [clickedButtons, setClickedButtons] = useState<Set<number>>(new Set());
-    const [flyingElements, setFlyingElements] = useState<Array<{id: string, product: Product, startRect: DOMRect}>>([]);
-    const productRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
 
-    const productsByCategory = categories.reduce((acc, category) => {
-        acc[category] = products.filter(product => product.category === category);
+  return (
+    <div
+      onClick={() => setIsFlipped(!isFlipped)}
+      className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col transition-all duration-200 hover:shadow-lg cursor-pointer border border-stone-200"
+      style={{
+        perspective: "1200px",
+        minHeight: "240px",
+      }}
+    >
+      <img
+        src={product.image}
+        alt={product.name}
+        className="w-full h-36 sm:h-48 object-cover"
+      />
+      <div className="p-3 sm:p-4 flex flex-col flex-grow">
+        <div className="flex justify-between items-start mb-2">
+          <h4 className="text-sm sm:text-lg font-serif font-semibold text-stone-900">
+            {product.name}
+          </h4>
+          <span className="text-sm sm:text-base font-bold text-amber-900">
+            {parseFloat(product.price).toFixed(2)}€
+          </span>
+        </div>
+        <p className="text-stone-600 text-xs sm:text-sm leading-relaxed flex-grow font-serif line-clamp-3">
+          {product.description}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const Products: React.FC<ProductsProps> = ({ products, title, categories }) => {
+    // ✅ Aseguramos que se reagrupe cuando cambie el estado de productos
+    const productsByCategory = useMemo(() => {
+      return categories.reduce((acc, category) => {
+        acc[category] = products.filter(p => p.category === category);
         return acc;
-    }, {} as Record<string, Product[]>);
+      }, {} as Record<string, Product[]>);
+    }, [products, categories]);
 
-
+    if (!products || products.length === 0) {
+      return (
+        <section className="w-full text-center py-12 text-stone-500 italic bg-[#fefbf7]">
+          No hay productos registrados todavía.
+        </section>
+      );
+    }
 
     return (
-        <section id="productos" className="py-8 sm:py-16 lg:py-24 bg-stone-50">
-            <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-                <div className="text-center mb-8 sm:mb-12">
-                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-wide text-stone-900">Nuestros Productos</h2>
-                    <p className="mt-2 sm:mt-4 max-w-2xl mx-auto text-sm sm:text-lg text-stone-700 font-serif italic px-4">
-                        Desde el pan de cada día hasta el capricho más dulce.
-                    </p>
-                    {isEditMode && (
-                        <div className="mt-6">
-                            <button onClick={onAdd} className="px-6 py-2 bg-amber-900 text-white font-semibold rounded-lg shadow-md hover:bg-amber-800">
-                                Añadir Nuevo Producto
-                            </button>
-                        </div>
-                    )}
+      <section
+        id="productos"
+        className="relative w-full max-w-7xl mx-auto px-4 sm:px-8 py-10 sm:py-16 bg-[#fefbf7] overflow-visible z-[5]"
+      >
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-4xl font-serif font-bold tracking-wide text-stone-900">
+            {title || "Nuestros Productos"}
+          </h2>
+          <p className="mt-2 sm:mt-4 max-w-2xl mx-auto text-sm sm:text-lg text-stone-700 font-serif italic">
+            Desde el pan de cada día hasta el capricho más dulce.
+          </p>
+        </div>
+    
+        {/* 🔥 Mapeo de categorías */}
+        <div className="space-y-12 sm:space-y-20">
+          {categories.map((category) => {
+            const items = productsByCategory[category] || [];
+            if (items.length === 0) return null;
+    
+            return (
+              <div key={category} className="relative z-[10]">
+                <h3 className="text-lg sm:text-2xl font-serif font-semibold text-stone-800 mb-6 text-center">
+                  {category}
+                </h3>
+    
+                {/* 🔥 Grid responsivo con altura automática */}
+                <div
+                  className="
+                    grid
+                    grid-cols-2
+                    sm:grid-cols-3
+                    lg:grid-cols-4
+                    gap-4 sm:gap-6 lg:gap-8
+                    place-items-stretch
+                    relative
+                  "
+                >
+                  {items.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
                 </div>
-                {categories.map(category => (
-                    productsByCategory[category].length > 0 && (
-                        <div key={category} className="mb-8 sm:mb-16">
-                            <h3 className="text-xl sm:text-3xl font-serif font-bold text-stone-800 mb-4 sm:mb-8 text-center">{category}</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
-                                {productsByCategory[category].map((product) => (
-                                    <div key={product.id} className="group relative border border-stone-300 rounded-lg sm:rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col bg-white md:hover:scale-105">
-                                        <div className="aspect-square bg-stone-100 overflow-hidden">
-                                           <img src={product.image} alt={product.name} loading="lazy" decoding="async" className="w-full h-full object-cover object-center md:group-hover:scale-110 transition-transform duration-300" />
-                                        </div>
-                                        <div className="p-2 sm:p-4 lg:p-6 flex flex-col flex-grow">
-                                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 sm:mb-2">
-                                                <h3 className="text-sm sm:text-lg lg:text-xl font-serif font-semibold text-stone-900 leading-tight">{product.name}</h3>
-                                                <p className="text-lg sm:text-xl font-bold text-amber-900 sm:ml-2">{parseFloat(product.price).toFixed(2)}€</p>
-                                            </div>
-                                            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed flex-grow font-serif line-clamp-3">{product.description}</p>
-                                            <div className="mt-4">
-                                                {isEditMode && (
-                                                    <div className="flex space-x-2">
-                                                        <button onClick={() => onEdit(product)} className="flex-1 px-4 py-2 text-sm bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600">Editar</button>
-                                                        <button onClick={() => onDelete(product.id)} className="flex-1 px-4 py-2 text-sm bg-red-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600">Eliminar</button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )
-                ))}
-
-
-            </div>
-        </section>
+              </div>
+            );
+          })}
+        </div>
+      </section>
     );
 };
 

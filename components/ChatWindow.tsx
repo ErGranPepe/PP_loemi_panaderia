@@ -44,13 +44,12 @@ const ChatWindow: React.FC = () => {
             setMessages([
                 { text: '¡Hola! Soy el asistente virtual de El Horno de Móstoles. ¿Cómo puedo ayudarte hoy?', isUser: false }
             ]);
-            // Correct: Initialize Gemini client with API key from environment variables.
-            if (!process.env.API_KEY) {
+            // Usar import.meta.env para variables de entorno en Vite
+            if (!import.meta.env.VITE_API_KEY) {
                 console.warn("API_KEY environment variable not set. Using mock responses.");
             } else {
                 try {
-                    // Correct: Initialize GoogleGenAI with a named apiKey parameter.
-                    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+                    const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
                     // Correct: Use ai.chats.create to start a new chat session.
                     const chatSession = ai.chats.create({
                         // Correct: Use a valid and recommended model.

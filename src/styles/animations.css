@@ -79,6 +79,25 @@
   animation: pulse-slow 3s ease-in-out infinite;
 }
 
+/* Overlay breathing/fading light for hero */
+@keyframes fadeOverlay {
+  0% { opacity: 0.35; }
+  50% { opacity: 0.5; }
+  100% { opacity: 0.35; }
+}
+.fade-overlay {
+  animation: fadeOverlay 6s ease-in-out infinite;
+}
+
+/* Stronger inviting bounce for scroll hint */
+@keyframes bounceStrong {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.bounce-strong {
+  animation: bounceStrong 1.6s ease-in-out infinite;
+}
+
 /* Steam animation */
 @keyframes steam {
   0% {
